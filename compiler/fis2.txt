@@ -1,0 +1,26 @@
+begin_class biblioteca
+int carte;
+int pol( int brici );
+end_class
+
+int ra;
+
+int g(int a,bool b) 
+begin_func
+int fas;
+return fas;
+end_func;
+
+float fct();
+
+begin_progr
+ra=(fct() + 1 + 1);
+g();
+int ra;
+rpm=1;
+f();
+int ap;
+bool bp;
+g(1,true);
+TypeOf(1 + true);
+end_progr

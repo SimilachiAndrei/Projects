@@ -1,0 +1,16 @@
+const: 0 name: carte type: int value: 5 place of declaration: biblioteca
+const: 0 name: a type: int value: 18 place of declaration: global
+const: 0 name: fas type: int value: 0 place of declaration: g
+const: 0 name: a1 type: int value: 122 place of declaration: main
+const: 1 name: fug type: char value: d place of declaration: main
+const: 0 name: b type: int value: 24 place of declaration: main
+const: 0 name: ev type: int value: 1 place of declaration: main
+const: 0 name: x type: string value: abd place of declaration: main
+const: 0 name: c type: char value: f place of declaration: main
+const: 0 name: i type: int value: 1 place of declaration: main
+Array name: vec type: int size: 17 values: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 52  place of declaration: main
+Functions:
+Function type: int name: pol place of declaration: biblioteca
+Parameter 1 type: int
+Parameter 2 type: string
+Function type: int name: g place of declaration: global

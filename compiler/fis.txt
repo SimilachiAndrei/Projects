@@ -1,0 +1,50 @@
+begin_class biblioteca
+int carte;
+int pol( int brici , string rem );
+end_class
+
+int a = 3;
+
+int g() 
+begin_func
+int fas;
+fas = 1 + 1;
+return fas;
+end_func;
+
+
+begin_progr
+    int a1 = 12 + 1;
+    const char fug = 'd';
+    int b = 5 + 1 + 1;
+    int ev = 1;
+    g();
+    a1 = 5 - a1 * 2 + g();
+    string x;
+    x = "abd";
+    a1 = a1 + b;
+    biblioteca.carte=5;
+    int vec[17] = 22;
+    char c;
+    c = 'f';
+    vec[16] = 52;
+    g();
+    Eval(ev);
+    biblioteca.pol(b,x);
+    Eval( vec[16] + vec[16] + 23 + g() );
+    TypeOf(x);
+    a1 = a1 + (23 * 5 + b * 3 + g());
+    if ( a1 > 7 && a1 < 2) 
+        a = b + a;
+    eif
+    for(int i = 1; i < 5; i=i+1)
+        a = a + b;
+    efor
+    while(a < b)
+        b = a + b;
+    ewhile
+    do
+        a = a + 1;
+    while (a < b);
+
+end_progr
