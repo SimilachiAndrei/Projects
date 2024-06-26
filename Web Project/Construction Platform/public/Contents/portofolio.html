@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details</title>
+    <link rel="stylesheet" href="/Contents/css/portofoliu.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="container">
+            <div class="header">
+                <nav class="menu">
+                    <ul>
+                        <li><a href="/myacc">My Account</a></li>
+                        <li><a href="/about">About</a></li>
+                    </ul>
+                    <div class="menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </nav>
+                <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+                    </div><span class="oletter">o</span></a>
+            </div>
+
+
+            <div class="middle">
+                <div class="content">
+                    <h1>Motto: <q id="companyMotto"></q></h1>
+                    <div class="description" id="description">
+                        <h2 id="companyTitle"></h2>
+                        <img id="companyImage" >
+                        <h3>Description</h3>
+                        <p id="companyDescription"></p>
+                    </div>
+
+                    <div class="steps" id="steps">
+                        <h3>Phases</h3>
+                        <div id="phases-container"></div>
+                    </div>
+
+                    <div class="reviews" id="reviews">
+                        <h2>Reviews from our clients:</h2>
+                        <div class="review-container" id="reviews-container"></div>
+                        <div class="review-controls">
+                            <button class="prev-review">&lt;</button>
+                            <button class="next-review">&gt;</button>
+                        </div>
+                    </div>
+
+                    <div class="contact" id="contact">
+                        <h3>Contact</h3>
+                        <p id="contactInfo"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>Copyright &copy; Team PlaCo</p>
+            </div>
+        </div>
+        <script src="/Contents/scripts/toggle.js"></script>
+        <script>
+            function getCompanyName() {
+                const url = '/api/getName';
+        
+                return fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+                        return data.username;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching company name:', error);
+                        return null;
+                    });
+            }
+        
+            async function fetchCompanyData() {
+                try {
+                    const companyName = await getCompanyName();
+                    console.log('Company Name:', companyName); // Debugging statement
+        
+                    if (!companyName) {
+                        throw new Error('Company name is null');
+                    }
+        
+                    const requestOptions = {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    };
+        
+                    const [companyResponse, phasesResponse, reviewsResponse] = await Promise.all([
+                        fetch(`/api/getPortofolioDetails/${companyName}`, requestOptions),
+                        fetch(`/api/getPortofolioPhases/${companyName}`, requestOptions),
+                        fetch(`/api/getPortofolioReviews/${companyName}`, requestOptions)
+                    ]);
+        
+                    if (!companyResponse.ok || !phasesResponse.ok || !reviewsResponse.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+        
+                    const company = await companyResponse.json();
+                    const phases = await phasesResponse.json();
+                    const reviews = await reviewsResponse.json();
+        
+                    console.log('Company Data:', company); // Debugging statement
+                    console.log('Phases Data:', phases); // Debugging statement
+                    console.log('Reviews Data:', reviews); // Debugging statement
+        
+                    // Company Details
+                    document.getElementById('companyTitle').textContent = company.company_name || 'Company Not Found';
+                    document.getElementById('companyMotto').textContent = company.motto || '';
+                    document.getElementById('companyDescription').textContent = company.description || '';
+        
+                    // Company Image
+                    const companyImage = document.getElementById('companyImage');
+                    if (company.data) {
+                        companyImage.src = `data:image/jpeg;base64,${btoa(String.fromCharCode(...new Uint8Array(company.data.data)))}`;
+                    }
+        
+                    // Phases
+                    const phasesContainer = document.getElementById('phases-container');
+                    phases.forEach(phase => {
+                        const phaseDiv = document.createElement('div');
+                        phaseDiv.className = 'phase';
+        
+                        // Phase Image
+                        const phaseImage = document.createElement('img');
+                        if (phase.data) {
+                            phaseImage.src = `data:image/jpeg;base64,${btoa(String.fromCharCode(...new Uint8Array(phase.data.data)))}`;
+                        } else {
+                            phaseImage.src = 'default-phase-image.jpg'; // Placeholder
+                        }
+                        phaseImage.alt = `Image for ${phase.description}`;
+                        phaseDiv.appendChild(phaseImage);
+        
+                        // Other Phase details
+                        phaseDiv.innerHTML += `
+                            <h4>${phase.description || ''}</h4>
+                            <p>Start Date: ${phase.start_date || ''}</p>
+                            <p>End Date: ${phase.end_date || ''}</p>
+                            <p>State: ${phase.state || ''}</p>
+                            <p>Price: ${phase.price || ''}</p>
+                        `;
+                        phasesContainer.appendChild(phaseDiv);
+                    });
+        
+                    // Reviews
+                    const reviewsContainer = document.getElementById('reviews-container');
+                    if (reviews && reviews.length > 0) {
+                        reviews.forEach((review, index) => {
+                            const reviewDiv = document.createElement('div');
+                            reviewDiv.className = 'review';
+                            if (index === 0) reviewDiv.classList.add('active'); // Make the first review active
+                            reviewDiv.innerHTML = `
+                                <p>${review.description || 'No description provided'}</p>
+                                <p class="author">- Client ${review.client_id || 'Unknown'}</p>
+                            `;
+                            reviewsContainer.appendChild(reviewDiv);
+                        });
+                    } else {
+                        reviewsContainer.innerHTML = '<p>No reviews yet.</p>';
+                    }
+        
+                    // Contact Information
+                    document.getElementById('contactInfo').innerHTML = `
+                        Tel: ${company.company_phone || ''}<br>
+                        Address: ${company.company_address || ''}<br>
+                    `;
+        
+                    // Initialize review navigation after reviews are loaded
+                    initializeReviewNavigation();
+        
+                } catch (error) {
+                    console.error('Error fetching company data:', error);
+                    document.getElementById('companyTitle').textContent = 'Error loading company details';
+                }
+            }
+        
+            function initializeReviewNavigation() {
+                const reviews = document.querySelectorAll('.review');
+                const prevReviewBtn = document.querySelector('.prev-review');
+                const nextReviewBtn = document.querySelector('.next-review');
+                let currentReview = 0;
+        
+                function showReview(index) {
+                    if (reviews[currentReview]) {
+                        reviews[currentReview].classList.remove('active');
+                    }
+                    if (reviews[index]) {
+                        reviews[index].classList.add('active');
+                    }
+                    currentReview = index;
+                }
+        
+                function showNextReview() {
+                    let nextIndex = (currentReview + 1) % reviews.length;
+                    showReview(nextIndex);
+                }
+        
+                function showPrevReview() {
+                    let prevIndex = (currentReview - 1 + reviews.length) % reviews.length;
+                    showReview(prevIndex);
+                }
+        
+                prevReviewBtn.addEventListener('click', showPrevReview);
+                nextReviewBtn.addEventListener('click', showNextReview);
+            }
+        
+            fetchCompanyData();
+        </script>
+        
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Page</title>
+    <link rel="stylesheet" href="/Contents/css/review.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <nav class="menu">
+                <ul id="menu-list">
+                    <li><a href="/myacc">My Account</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+
+            <!-- <div class="buttons">
+            </div> -->
+
+            <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+                </div><span class="oletter">o</span></a>
+
+        </div>
+
+        <div class="middle">
+            <div class="content">
+                <div class="reviews" id="reviews">
+                    <h2>Leave a Review:</h2>
+                    <form id="reviewForm">
+                        <div>
+                            <label for="companySelect">Company:</label>
+                            <select id="companySelect" name="companySelect" required>
+                                <option value="">Select a company</option>
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="phaseSelect">Phase:</label>
+                            <select id="phaseSelect" name="phaseSelect" required>
+                                <option value="">Select a phase</option>
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" required></textarea>
+                        </div>
+                        <button type="submit">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Copyright &copy; Team PlaCo</p>
+        </div>
+    </div>
+    <script src="/Contents/scripts/toggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('jwtToken'); // Assuming you store the JWT in localStorage
+
+            // Fetch finished phases
+            const fetchFinishedPhases = async () => {
+                try {
+                    const response = await fetch('/api/getFinishedPhases', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching finished phases:', error);
+                    return []; // Ensure an empty array is returned on error
+                }
+            };
+
+            // Populate company select
+            const populateCompanySelect = (phases) => {
+                const companySelect = document.getElementById('companySelect');
+                const companies = [...new Set(phases.map(phase => phase.company_id))];
+                companies.forEach(companyId => {
+                    const option = document.createElement('option');
+                    option.value = companyId;
+                    option.textContent = `Company ${companyId}`;
+                    companySelect.appendChild(option);
+                });
+            };
+
+            // Populate phase select based on selected company
+            const populatePhaseSelect = (phases, companyId) => {
+                const phaseSelect = document.getElementById('phaseSelect');
+                phaseSelect.innerHTML = '<option value="">Select a phase</option>';
+                const companyPhases = phases.filter(phase => phase.company_id === parseInt(companyId));
+                companyPhases.forEach(phase => {
+                    const option = document.createElement('option');
+                    option.value = phase.id;
+                    option.textContent = `Phase ${phase.id}`;
+                    phaseSelect.appendChild(option);
+                });
+            };
+
+            // Fetch and populate initial data
+            const phases = await fetchFinishedPhases();
+            populateCompanySelect(phases);
+
+            // Event listener for company select change
+            document.getElementById('companySelect').addEventListener('change', (event) => {
+                const companyId = event.target.value;
+                populatePhaseSelect(phases, companyId);
+            });
+
+            // Event listener for form submission
+            document.getElementById('reviewForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const companyId = document.getElementById('companySelect').value;
+                const phaseId = document.getElementById('phaseSelect').value;
+                const description = document.getElementById('description').value;
+
+                const reviewData = {
+                    company_id: parseInt(companyId),
+                    phase_id: parseInt(phaseId),
+                    description: description
+                };
+
+                try {
+                    const response = await fetch('/api/submitReview', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(reviewData)
+                    });
+
+                    if (response.ok) {
+                        alert('Review submitted successfully');
+                        event.target.reset();
+                        location.reload();
+                    } else {
+                        location.reload();
+                        throw new Error('Failed to submit review');
+                    }
+                } catch (error) {
+                    console.error('Error submitting review:', error);
+                    alert('Failed to submit review. Please try again.');
+                    location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

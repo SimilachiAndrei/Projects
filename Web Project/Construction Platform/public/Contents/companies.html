@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies</title>
+    <link rel="stylesheet" href="/Contents/css/companies.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <nav class="menu">
+                <ul>
+                    <li><a href="/myacc">My Account</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+
+            <h2>Construction Companies</h2>
+            <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="image"></div></div><span class="oletter">o</span></a>
+
+        </div>
+        <div class="middle">
+            <div class="content">
+
+                <div class="filters">
+                    <div class="filter-option">
+                        <label for="location">Location:</label>
+                        <select id="location">
+                            <option value="">Any</option>
+                        </select>
+                    </div>
+                    <div class="filter-option">
+                        <label for="construction">Construction:</label>
+                        <select id="construction">
+                            <option value="">Any</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="description" id="description">
+                    <p>
+                        Only one click away lies your best decision!<br>
+                        Choose the right company for your needs and forget about the hassle of construction!
+                    </p>
+                </div>
+
+                <div class="company-grid" id="company-grid">
+                    <!-- Companies will be dynamically inserted here -->
+                </div>
+                <div class="contact" id="contact">
+                    <br>
+                    <h3>Contact</h3>
+                    <p>
+                        Tel: 0712 345 678 <br>
+                        E-mail: help.placo@mail.com
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Copyright &copy; Team PlaCo</p>
+        </div>
+    </div>
+
+    <script src="/Contents/scripts/toggle.js"></script>
+    <script>
+        async function fetchCompanies() {
+            const response = await fetch('/api/companies');
+            const companies = await response.json();
+            return companies;
+        }
+
+        function populateFilters(companies) {
+            const locationSelect = document.getElementById('location');
+            const constructionSelect = document.getElementById('construction');
+
+            const locations = new Set();
+            const profiles = new Set();
+
+            companies.forEach(company => {
+                locations.add(company.company.address);
+                profiles.add(company.company.profile);
+            });
+
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+
+            profiles.forEach(profile => {
+                const option = document.createElement('option');
+                option.value = profile;
+                option.textContent = profile;
+                constructionSelect.appendChild(option);
+            });
+        }
+
+        function filterCompanies(companies) {
+            const locationFilter = document.getElementById('location').value;
+            const constructionFilter = document.getElementById('construction').value;
+
+            return companies.filter(company => {
+                const matchesLocation = !locationFilter || company.company.address === locationFilter;
+                const matchesConstruction = !constructionFilter || company.company.profile === constructionFilter;
+                return matchesLocation && matchesConstruction;
+            });
+        }
+
+        function populateCompanies(companies) {
+            const companyGrid = document.getElementById('company-grid');
+            companyGrid.innerHTML = ''; // Clear existing content
+
+            companies.forEach(company => {
+                const companyDiv = document.createElement('div');
+                companyDiv.classList.add('company');
+
+                const companyLink = document.createElement('a');
+                companyLink.href = `/company/${company.company.name}`; // You can set appropriate href for company details
+
+                const companyImage = document.createElement('img');
+                if (company.image && company.image.data) {
+                    const base64Image = btoa(String.fromCharCode.apply(null, company.image.data.data));
+                    companyImage.src = `data:image/jpeg;base64,${base64Image}`;
+                } else {
+                    companyImage.src = '/Contents/css/images/default.jpg'; // Fallback image
+                }
+
+                const companyName = document.createTextNode(company.company.name);
+
+                companyLink.appendChild(companyImage);
+                companyLink.appendChild(companyName);
+                companyDiv.appendChild(companyLink);
+                companyGrid.appendChild(companyDiv);
+            });
+        }
+
+        async function init() {
+            const companies = await fetchCompanies();
+            populateFilters(companies);
+
+            const locationSelect = document.getElementById('location');
+            const constructionSelect = document.getElementById('construction');
+
+            locationSelect.addEventListener('change', () => {
+                const filteredCompanies = filterCompanies(companies);
+                populateCompanies(filteredCompanies);
+            });
+
+            constructionSelect.addEventListener('change', () => {
+                const filteredCompanies = filterCompanies(companies);
+                populateCompanies(filteredCompanies);
+            });
+
+            populateCompanies(companies);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

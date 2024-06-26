@@ -1,0 +1,229 @@
+:root {
+    --c1: #E27D60;
+    --c2: #85dcb8;
+    --c3: #E8A87C;
+    --c4: #C38D9E;
+    --c5: #41B3A3;
+    --text-color: #333;
+    --text-light: #fff;
+    --bg-light: #f9f9f9;
+    --border-radius: 10px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+    background-color: var(--bg-light);
+    color: var(--text-color);
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--c2);
+    padding: 1rem;
+    flex-shrink: 0;
+    z-index: 1000;
+}
+
+.titlu {
+    text-decoration: none;
+    color: var(--text-light);
+    font-family: 'Arial', sans-serif;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    border-radius: var(--border-radius);
+}
+
+.menu ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-light);
+    transition: transform 0.3s ease;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.oletter {
+    display: inline-block;
+    animation: spin 2s infinite linear;
+    transform-origin: center;
+}
+
+.cletter {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    width: 0.6em;
+    height: 0.6em;
+    background-image: url('/Contents/css/images/helmet.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0.2em;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.middle {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    background: linear-gradient(-45deg, var(--c5), var(--c4));
+}
+
+.content {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--c5);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--c4);
+    border-radius: var(--border-radius);
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--c1);
+    color: var(--text-light);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--c3);
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--c3);
+    padding: 0.1rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .titlu {
+        font-size: 2rem;
+    }
+
+    .menu ul {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        background-color: var(--bg-light);
+        padding: 20px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu ul li {
+        margin: 10px 0;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5.5px, -5px);
+    }
+
+    .menu.active ul {
+        display: flex;
+    }
+}
+
+@media (max-width: 480px) {
+    .titlu {
+        font-size: 1.5rem;
+    }
+}

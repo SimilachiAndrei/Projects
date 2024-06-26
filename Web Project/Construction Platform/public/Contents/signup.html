@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/Contents/css/signup.css">
+  <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+  <div class="container">
+    <a href="/" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+      </div><span class="oletter">o</span></a>
+    <div class="login-box">
+      <h2>Sign Up</h2>
+      <form method="POST" action="/signup">
+        <div class="user-box">
+          <input type="text" name="username" placeholder="Enter a username" required>
+          <label>Username</label>
+        </div>
+        <div class="user-box">
+          <input type="password" name="password" placeholder="Enter a password" required>
+          <label>Password</label>
+        </div>
+        <div class="dot-box">
+          <label>Are you a client or a company?</label>
+          <input type="radio" name="type" value="client" required>Client
+          <input type="radio" name="type" value="company" required>Company
+        </div>
+        <div class="user-box">
+          <input type="email" name="email" placeholder="Enter an email" required>
+          <label>Email</label>
+        </div>
+        <div id="companyFields">
+          <div class="user-box">
+            <input type="text" name="companyName" placeholder="Enter the company name">
+            <label>Company Name</label>
+          </div>
+          <div class="user-box">
+            <input type="text" name="companyAddress" placeholder="Enter the company address">
+            <label>Company Address</label>
+          </div>
+          <div class="user-box">
+            <input type="text" name="companyPhone" placeholder="Enter the company number">
+            <label>Company Phone</label>
+          </div>
+          <div class="user-box">
+            <input type="text" name="companyProfile" placeholder="Enter the company profile">
+            <label>Company Profile</label>
+          </div>
+        </div>
+        <button class="login">Sign Up</button>
+      </form>
+      <div class="sign-box">
+        <p>Have an account already?</p>
+        <a href="/login" class="logref">Login</a>
+      </div>
+    </div>
+  </div>
+  <script src="/Contents/scripts/toggleFields.js"></script>
+</body>
+
+</html>

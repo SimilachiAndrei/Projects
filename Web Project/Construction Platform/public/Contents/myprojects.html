@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Image Upload</title>
+    <link rel="stylesheet" href="/Contents/css/myproject.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <nav class="menu">
+                <ul>
+                    <li><a href="/myacc">My Account</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+            <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+                </div><span class="oletter">o</span></a>
+        </div>
+
+        <div class="middle">
+            <div id="project-details" class="content">
+                <h1>Project Details</h1>
+                <div class="project-container"></div>
+
+                <div class="upload-form">
+                    <h2>Upload Images</h2>
+                    <form id="imageUploadForm">
+                        <div class="field">
+                            <label for="phaseId">Select Project Phase:</label>
+                            <select id="phaseId" name="phaseId" required>
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="imageFile">Choose Image File:</label>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" required>
+                        </div>
+                        <div class="field">
+                            <button type="submit">Finish Project</button>
+                        </div>
+                    </form>
+                    <button id="renounceProjectButton">Renounce Project</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Copyright &copy; Team PlaCo</p>
+        </div>
+    </div>
+
+    <script src="/Contents/scripts/toggle.js"></script>
+    <!-- <script src="/Contents/scripts/myaccEventListeners.js"></script> -->
+    <script src="/Contents/scripts/renounceEventListener.js"></script>
+    <script src="/Contents/scripts/projectImageUpload.js"></script>
+</body>
+
+</html>

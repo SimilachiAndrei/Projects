@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <link rel="stylesheet" href="/Contents/css/post.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="hat"></div>
+                </div><span class="oletter">o</span></a>
+            <div class="post-box">
+                <div>
+                    <h1>Describe your project</h1>
+                    <form class="formular" action="/post" method="POST">
+                        <div class="content-box">
+                            <input type="text" name="projectName" required>
+                            <label>Project Name</label>
+                        </div>
+                        <div class="content-box">
+                            <input type="text" name="description" required>
+                            <label>Description</label>
+                        </div>
+                        <button type="button" id="add-content-box" class="button">Add Phase</button>
+                        <button class="button" type="submit">Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="image"></div>
+    </div>
+    <script>
+        let phaseIndex = 1;
+
+        document.getElementById('add-content-box').addEventListener('click', function () {
+            // Create a new div element with class 'content-box'
+            var newContentBox = document.createElement('div');
+            newContentBox.classList.add('content-box');
+
+            // Create a new input element
+            var newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.name = 'phases[' + phaseIndex + ']'; // Use an index in the name
+            newInput.required = true;
+
+            // Create a new label element
+            var newLabel = document.createElement('label');
+            newLabel.textContent = 'Phase ' + phaseIndex;
+
+            // Append the input and label to the new content-box div
+            newContentBox.appendChild(newInput);
+            newContentBox.appendChild(newLabel);
+
+            // Append the new content-box to the form
+            var form = document.querySelector('.formular');
+            form.insertBefore(newContentBox, document.getElementById('add-content-box'));
+
+            phaseIndex++;
+        });
+
+    </script>
+</body>
+
+</html>

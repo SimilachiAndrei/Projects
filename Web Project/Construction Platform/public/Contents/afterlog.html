@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/Contents/css/afterlog.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <nav class="menu">
+                <ul id="menu-list">
+                    <!-- Menu items to be dynamically adjusted -->
+                    <li><a href="/companies">Companies</a></li>
+                    <li><a href="/myacc">My Account</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+
+            <div class="buttons">
+                <!-- Buttons to be dynamically adjusted -->
+            </div>
+
+            <a href="/afterlog" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+                </div><span class="oletter">o</span></a>
+
+        </div>
+        <div class="middle">
+            <div class="content">
+                <h1>Below are some of the constructions that we have aided in being built:</h1>
+                <div class="construct1">
+                    <h3>The house of a renowed familly
+                    </h3>
+                    <img src="/Contents/css/images/casalog.jpg" alt="House of a renowned family">
+                </div>
+                <div class="construct2">
+                    <h3>Building in Abu Dhabi owned by a sheikh</h3>
+                    <img src="/Contents/css/images/constlog.webp" alt="Building in Abu Dhabi">
+                </div>
+                <div class="reviews">
+                    <h2>Reviews from our clients:</h2>
+                    <div class="review-container">
+                        <div class="review active">
+                            <p>"PlaCo provided exceptional service and helped us build our dream house. Highly
+                                recommended!"
+                            </p>
+                            <p class="author">- John Doe</p>
+                        </div>
+                        <div class="review">
+                            <p>"The team at PlaCo is professional, efficient, and delivered outstanding results. Thank
+                                you!"
+                            </p>
+                            <p class="author">- Jane Smith</p>
+                        </div>
+                        <div class="review">
+                            <p>"PlaCo's expertise and attention to detail are unparalleled. They exceeded our
+                                expectations."
+                            </p>
+                            <p class="author">- Michael Johnson</p>
+                        </div>
+                    </div>
+                    <div class="review-controls">
+                        <button class="prev-review">&lt;</button>
+                        <button class="next-review">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Copyright &copy; Team PlaCo</p>
+        </div>
+    </div>
+    <script src="/Contents/scripts/toggle.js"></script>
+    <script src="/Contents/scripts/circle.js"></script>
+
+    <script>
+        // Fetch user role from server
+        fetch('/api/role')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const userRole = data.role;
+                const menuList = document.getElementById('menu-list');
+                const buttonsContainer = document.querySelector('.buttons');
+
+                if (userRole === 'client') {
+                    // Adjust menu items and buttons for client
+                    // Add Licitations link to menu
+                    const licitationsItem = document.createElement('li');
+                    licitationsItem.innerHTML = '<a href="/myoffers">Licitations</a>';
+                    menuList.appendChild(licitationsItem);
+
+                    const reviewsItem = document.createElement('li');
+                    reviewsItem.innerHTML = '<a href="/reviews">Add Review</a>';
+                    menuList.appendChild(reviewsItem);
+
+                    const postButton = document.createElement('button');
+                    postButton.className = 'post';
+                    postButton.textContent = 'Post';
+                    postButton.onclick = function () {
+                        location.href = '/post';
+                    };
+                    buttonsContainer.appendChild(postButton);
+
+                } else if (userRole === 'company') {
+                    // Adjust menu items and buttons for company
+                    const companiesLink = menuList.querySelector('a[href="/companies"]');
+                    if (companiesLink) {
+                        companiesLink.parentNode.remove();
+                    }
+                    const projectsItem = document.createElement('li');
+                    projectsItem.innerHTML = '<a href="/myprojects">My Projects</a>';
+                    menuList.appendChild(projectsItem);
+
+                    const portofolioItem = document.createElement('li');
+                    portofolioItem.innerHTML = '<a href="/portofolio">Portofolio</a>';
+                    menuList.appendChild(portofolioItem);
+
+                    // Change 'Post' button to 'Licitate' button
+                    const licitateButton = document.createElement('button');
+                    licitateButton.className = 'post'; 
+                    licitateButton.textContent = 'Licitate'; 
+                    licitateButton.onclick = function () {
+                        location.href = '/licitations';
+                    };
+                    buttonsContainer.appendChild(licitateButton); 
+                }
+
+            })
+            .catch(error => {
+                console.error('Error fetching user role:', error);
+            });
+
+    </script>
+</body>
+
+</html>

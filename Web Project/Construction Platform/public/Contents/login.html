@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/Contents/css/login.css">
+  <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+  <style>
+    .popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid #ccc;
+      padding: 20px;
+      background-color: var(--c2);
+      z-index: 1000;
+    }
+    .popup .close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a href="/" class="titlu">Pla<div class="cletter">c<div class="image"></div>
+      </div><span class="oletter">o</span></a>
+    <div class="login-box">
+      <h2>Login</h2>
+      <form id="loginForm" method="POST" action="/login">
+        <div class="user-box">
+          <input type="text" name="username" required>
+          <label>Username</label>
+        </div>
+        <div class="user-box">
+          <input type="password" name="password" required>
+          <label>Password</label>
+        </div>
+        <button type="submit" class="login">Login</button>
+      </form>
+      <div class="sign-box">
+        <p>Don't have an account already?</p>
+        <a href="/signup" class="logref">Create an account</a>
+      </div>
+      <p><a href="#" id="forgotPasswordLink">Forgot your password?</a></p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="forgotPasswordPopup">
+    <span class="close" id="closePopup">&times;</span>
+    <h2>Forgot Password</h2>
+    <form id="forgotPasswordForm">
+      <div class="user-box">
+        <input type="text" id="forgotUsername" name="username" required>
+        <label>Username</label>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('forgotPasswordLink').addEventListener('click', function (event) {
+      event.preventDefault();
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('forgotPasswordPopup').style.display = 'block';
+    });
+
+    document.getElementById('closePopup').addEventListener('click', function () {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('forgotPasswordPopup').style.display = 'none';
+    });
+
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('forgotUsername').value;
+
+      fetch('/api/forgotPassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username })
+      })
+      .then(response => response.json())
+      .then(data => {
+          document.getElementById('overlay').style.display = 'none';
+          document.getElementById('forgotPasswordPopup').style.display = 'none';
+          window.location.href = '/login';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+</body>
+
+</html>

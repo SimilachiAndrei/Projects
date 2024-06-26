@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews Management Page</title>
+    <link rel="stylesheet" href="/Contents/css/admin.css">
+    <link rel="icon" type="image/x-icon" href="/Contents/css/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Navigation Menu -->
+        </div>
+        <div class="middle">
+            <div class="content">
+                <div class="reviews" id="reviews">
+                    <h2>Manage Reviews</h2>
+                    <div id="reviewList">
+                        <!-- Reviews will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Copyright &copy; Team PlaCo</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('jwtToken'); // Assuming you store the JWT in localStorage
+
+            // Fetch reviews
+            const fetchReviews = async () => {
+                try {
+                    const response = await fetch('/api/getReviews', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching reviews:', error);
+                    return []; // Ensure an empty array is returned on error
+                }
+            };
+
+            // Delete review
+            const deleteReview = async (id) => {
+                try {
+                    const response = await fetch(`/api/deleteReview/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error deleting review:', error);
+                    alert('Failed to delete review. Please try again.');
+                }
+            };
+
+            // Populate reviews
+            const populateReviews = (reviews) => {
+                const reviewList = document.getElementById('reviewList');
+                reviewList.innerHTML = ''; // Clear the review list
+                reviews.forEach(review => {
+                    const reviewDiv = document.createElement('div');
+                    reviewDiv.className = 'review';
+                    reviewDiv.innerHTML = `
+                        <p><strong>Review ID:</strong> ${review.id}</p>
+                        <p>${review.description}</p>
+                        <button class="deleteButton" data-id="${review.id}">Delete</button>
+                    `;
+                    reviewList.appendChild(reviewDiv);
+                });
+
+                // Add event listeners to delete buttons
+                const deleteButtons = document.querySelectorAll('.deleteButton');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const reviewId = event.target.getAttribute('data-id');
+                        await deleteReview(reviewId);
+                        // Remove the review from the DOM
+                        event.target.parentElement.remove();
+                    });
+                });
+            };
+
+            // Fetch and display reviews
+            const reviews = await fetchReviews();
+            populateReviews(reviews);
+        });
+    </script>
+</body>
+
+</html>

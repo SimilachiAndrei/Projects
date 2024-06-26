@@ -1,0 +1,144 @@
+:root {
+    --c1: #E27D60;
+    --c2: #85dcb8;
+    --c3: #E8A87C;
+    --c4: #C38D9E;
+    --c5: #41B3A3;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    overflow-x: hidden;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--c2);
+    padding: 1rem;
+    flex-shrink: 0;
+}
+
+.titlu {
+    margin: 0;
+    text-align: center;
+    color: white;
+    font-family: sans-serif;
+    font-size: 3rem;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.login,
+.signup {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--c5);
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.signup:hover {
+    background-color: var(--c4);
+    transition: 1s;
+    color: white;
+}
+
+.login:hover {
+    background-color: var(--c1);
+    transition: 1s;
+    color: white;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.oletter {
+    display: inline-block;
+    animation: spin 2s infinite linear;
+    transform-origin: center;
+}
+
+.cletter {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    width: 0.6em;
+    height: 0.6em;
+    background-image: url('images/helmet.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0.2em;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--c3);
+    padding: 0.1rem;
+    flex-shrink: 0;
+}
+
+.middle {
+    background-image: url('images/back.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    }
+    
+    .content {
+    opacity: 0.8;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1rem;
+    border-radius: 10px;
+    }
+    
+    @media (max-width: 768px) {
+    .titlu {
+    font-size: 2rem;
+    }
+    }
+    
+    @media (max-width: 480px) {
+    .titlu {
+    font-size: 1.5rem;
+    }
+    .buttons {
+        flex-direction: column;
+    }
+    
+    .login,
+    .signup {
+        width: 100%;
+    }
+}
